@@ -35,6 +35,14 @@ async function fund(event) {
     publicClient = createPublicClient({
       transport: custom(window.ethereum),
     });
+
+    publicClient.simulateContract({
+      //address
+      // abi
+      // functionName
+      // argu
+      // account
+    });
   }
 }
 
