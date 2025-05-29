@@ -24,6 +24,7 @@ const balanceButton = document.getElementById(
 const withdrawButton = document.getElementById(
   "withdrawButton"
 ) as HTMLButtonElement;
+const addressToAmountFundedButton = document.getElementById("addressToAmountFundedButton") as HTMLButtonElement; 
 
 let walletClient: WalletClient | undefined;
 let publicClient: PublicClient | undefined;
@@ -144,8 +145,36 @@ async function withdraw(event: Event): Promise<void> {
   }
 }
 
+async function addressToAmountFunded(): Promise<void> {
+  if (!window.ethereum) {
+    connectButton.innerHTML = "Please install MetaMask";
+    return;
+  }
+  const transport = custom(window.ethereum); 
+  const tempClient = createPublicClient({ transport }); 
+  const chain = await getCurrentChain(tempClient); 
+
+  walletClient = createWalletClient({ transport, chain }); 
+  publicClient = createPublicClient({ transport, chain }); 
+
+  const [account] = await walletClient.requestAddresses();
+
+  if (!/^0x[a-fA-F0-9]{40}$/.test(account)) {
+    console.error("Invalid Ethereum address format.");
+    return;
+  }
+
+  const result = await publicClient.readContract({
+    address: FUND_ME_CONTRACT_ANVIL_ADDRESS,
+    abi,
+    functionName: "getAddressToAmountFunded",
+    args: [account as `0x${string}`],
+  });
+  console.log(`You donated ${formatEther(result as bigint)} ETH`);
+}
 // Event bindings
 connectButton.onclick = connectWallet;
 fundButton.onclick = fund;
 balanceButton.onclick = getBalance;
 withdrawButton.onclick = withdraw;
+addressToAmountFundedButton.onclick = addressToAmountFunded; 
