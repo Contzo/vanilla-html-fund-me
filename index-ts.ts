@@ -9,7 +9,8 @@ import {
   PublicClient,
   WalletClient,
 } from "viem";
-import { FUND_ME_CONTRACT_ANVIL_ADDRESS, abi } from "./constants-js.js";
+import "viem/window";
+import { FUND_ME_CONTRACT_ANVIL_ADDRESS, abi } from "./constants-ts";
 
 // Element references with proper type assertions
 const connectButton = document.getElementById(

@@ -36,7 +36,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var viem_1 = require("https://esm.sh/viem");
+var viem_1 = require("viem");
+require("viem/window");
 var constants_js_js_1 = require("./constants-js.js");
 // Element references with proper type assertions
 var connectButton = document.getElementById("connectButton");
